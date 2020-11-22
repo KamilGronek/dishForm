@@ -9,7 +9,7 @@ The main role of the form is functionality. Built on the simple, tidy looking bo
 
 ## Live preview
 
-[Link to appication](https://kamilgronek.github.io/dish-copy/)
+[Link to appication](https://kamilgronek.github.io/dishForm/)
 
 ## Technologies
 
