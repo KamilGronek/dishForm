@@ -1,0 +1,8 @@
+@media (max-width: 720px) {
+  .captionOrder {
+    font-size: 30px;
+  }
+  .captionsHeading {
+    font-size: 10px;
+  }
+}
