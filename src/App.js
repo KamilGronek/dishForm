@@ -7,10 +7,6 @@ class App extends Component {
   counter = 0;
   constructor(props) {
     super(props);
-    this.handleChangeGeneralValues = this.handleChangeGeneralValues.bind(this);
-    this.handleForSpecifiedValues = this.handleForSpecifiedValues.bind(this);
-    this.handleDiameter = this.handleDiameter.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       dishes: {
@@ -28,7 +24,7 @@ class App extends Component {
     };
   }
 
-  handleChangeGeneralValues(e) {
+  handleChangeGeneralValues = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     let dishes = this.state.dishes;
@@ -41,18 +37,18 @@ class App extends Component {
         error: "",
       });
     }
-  }
+  };
 
-  handleDiameter(e) {
+  handleDiameter = (e) => {
     const value = parseFloat(e.target.value);
     let dishes = this.state.dishes;
     dishes.diameter = value;
     this.setState({
       dishes,
     });
-  }
+  };
 
-  handleForSpecifiedValues(e) {
+  handleForSpecifiedValues = (e) => {
     const value = parseInt(e.target.value);
     const name = e.target.name;
     let dishes = this.state.dishes;
@@ -60,7 +56,7 @@ class App extends Component {
     this.setState({
       dishes,
     });
-  }
+  };
 
   getPositionForType = () => {
     switch (this.state.dishes.type) {
@@ -174,7 +170,7 @@ class App extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
 
     let dish = this.getStatesForTypes();
@@ -212,7 +208,7 @@ class App extends Component {
         throw new Error("Something went wrong...");
       })
       .catch((error) => console.log(error));
-  }
+  };
 
   showTableOrder() {
     this.setState({
