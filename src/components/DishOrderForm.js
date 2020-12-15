@@ -15,7 +15,7 @@ class DishOrderForm extends Component {
         <div className="container">
           <form
             style={{ borderRadius: "10px" }}
-            className="m-5 border bg-light mx-auto col-xl-4 col-10 offset-xl-4 offset-1"
+            className="m-5 border bg-light mx-auto col-xl-4 col-lg-4 col-sm-6  col-10 offset-xl-4 offset-lg-4 offset-sm-3 offset-1"
             onSubmit={handleSubmit}
           >
             <h4 className="p-3 d-flex justify-content-center">Dishes Form</h4>
