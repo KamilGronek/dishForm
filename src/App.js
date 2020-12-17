@@ -105,18 +105,6 @@ function App() {
       default:
         return "can't found ";
     }
-
-    // return (
-    //   <GetStateForType
-    //     name={state.dishes.name}
-    //     preparation_time={state.dishes.preparation_time}
-    //     type={state.dishes.type}
-    //     no_of_slices={state.dishes.no_of_slices}
-    //     diameter={state.dishes.diameter}
-    //     spiciness_scale={state.dishes.spiciness_scale}
-    //     slices_of_bread={state.dishes.slices_of_bread}
-    //   />
-    // );
   };
 
   const handleSubmit = (e) => {
@@ -199,19 +187,3 @@ function App() {
 }
 
 export default App;
-//===================================================
-
-// function useLegacySetState(initialState) {
-//   const stateReducer = (prevState, stateChanges) => {
-//     const newState = {
-//       // newState
-//       ...prevState,
-//       ...stateChanges,
-//     };
-//     console.log(prevState);
-//     console.log(newState);
-//     console.log(stateChanges);
-//     return newState;
-//   };
-//   return useReducer(stateReducer, initialState);
-// }
