@@ -5,12 +5,17 @@ import LoginFormListHeader from "./components/DishOrderTableHeader";
 import { DishOrderTable } from "./components/DishOrderTable";
 import { GetPositionForType } from "./components/SwitchResultForType";
 
-const stateReducer = (prevState, stateChanges) => {
-  return {
-    ...prevState,
-    ...stateChanges,
+function useLegacySetState(initialState) {
+  const stateReducer = (prevState, stateChanges) => {
+    const newState = {
+      ...prevState,
+      ...stateChanges,
+    };
+    return newState;
   };
-};
+  return useReducer(stateReducer, initialState);
+}
+
 function App() {
   const initialState = {
     dishes: {
@@ -27,7 +32,7 @@ function App() {
     visibleOrderTable: false,
   };
 
-  const [state, setState] = useReducer(stateReducer, initialState);
+  const [state, setState] = useLegacySetState(initialState);
 
   const handleChangeGeneralValues = (e) => {
     const value = e.target.value;
