@@ -5,16 +5,26 @@ import LoginFormListHeader from "./components/DishOrderTableHeader";
 import { DishOrderTable } from "./components/DishOrderTable";
 import { GetPositionForType } from "./components/SwitchResultForType";
 
-function useLegacySetState(initialState) {
-  const stateReducer = (prevState, stateChanges) => {
-    const newState = {
-      ...prevState,
-      ...stateChanges,
-    };
-    return newState;
-  };
-  return useReducer(stateReducer, initialState);
-}
+// function useLegacySetState(initialState) {
+//   const stateReducer = (prevState, stateChanges) => {
+//     const newState = {
+//       ...prevState,
+//       ...stateChanges,
+//     };
+//     return newState;
+//   };
+//   return useReducer(stateReducer, initialState);
+// }
+
+const dishesReducer = (state, action) => {
+  switch (action.type) {
+    case "CHOOSE A DISH":
+      const { dishes } = action;
+      return { ...state, dishes };
+    default:
+      return state;
+  }
+};
 
 function App() {
   const initialState = {
@@ -32,18 +42,18 @@ function App() {
     visibleOrderTable: false,
   };
 
-  const [state, setState] = useLegacySetState(initialState);
+  const [state, dispatch] = useReducer(dishesReducer, initialState);
 
   const handleChangeGeneralValues = (e) => {
     const value = e.target.value;
     const name = e.target.name;
     let dishes = state.dishes;
     dishes[name] = value;
-    setState({
+    dispatch({
       dishes,
     });
     if (value === "") {
-      setState({
+      dispatch({
         error: "",
       });
     }
@@ -53,7 +63,7 @@ function App() {
     const value = parseFloat(e.target.value);
     let dishes = state.dishes;
     dishes.diameter = value;
-    setState({
+    dispatch({
       dishes,
     });
   };
@@ -63,7 +73,7 @@ function App() {
     const name = e.target.name;
     let dishes = state.dishes;
     dishes[name] = value;
-    setState({
+    dispatch({
       dishes,
     });
   };
@@ -136,7 +146,7 @@ function App() {
       .then((response) => {
         if (response.status === 200) {
           return response.json().then((dishResponse) => {
-            setState({
+            dispatch({
               dishResponse: dishResponse,
             });
             showTableOrder(dishResponse);
@@ -154,7 +164,7 @@ function App() {
   };
 
   const showTableOrder = () => {
-    setState({
+    dispatch({
       visibleOrderTable: true,
     });
   };
@@ -164,13 +174,13 @@ function App() {
     if (res.no_of_slices) {
       error = res.no_of_slices;
     }
-    setState({
+    dispatch({
       error,
     });
   };
 
   const cancelErrorForm = () => {
-    setState({
+    dispatch({
       error: "",
     });
   };
