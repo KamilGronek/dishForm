@@ -16,11 +16,25 @@ import { GetPositionForType } from "./components/SwitchResultForType";
 //   return useReducer(stateReducer, initialState);
 // }
 
-const dishesReducer = (state, action) => {
+const dishReducer = (state, action) => {
   switch (action.type) {
-    case "CHOOSE A DISH":
+    case "CHOOSE_A_DISH": {
       const { dishes } = action;
       return { ...state, dishes };
+    }
+    case "SHOW_ORDERED_DISH": {
+      const { visibleOrderTable } = action;
+      return { ...state, visibleOrderTable };
+    }
+    case "SET_ERROR": {
+      const { error } = action;
+      return { ...state, error };
+    }
+    case "GET_RESPONSE": {
+      const { dishResponse } = action;
+      return { ...state, dishResponse };
+    }
+
     default:
       return state;
   }
@@ -42,7 +56,7 @@ function App() {
     visibleOrderTable: false,
   };
 
-  const [state, dispatch] = useReducer(dishesReducer, initialState);
+  const [state, dispatch] = useReducer(dishReducer, initialState);
 
   const handleChangeGeneralValues = (e) => {
     const value = e.target.value;
@@ -50,6 +64,7 @@ function App() {
     let dishes = state.dishes;
     dishes[name] = value;
     dispatch({
+      type: "CHOOSE_A_DISH",
       dishes,
     });
     if (value === "") {
@@ -64,6 +79,7 @@ function App() {
     let dishes = state.dishes;
     dishes.diameter = value;
     dispatch({
+      type: "CHOOSE_A_DISH",
       dishes,
     });
   };
@@ -74,6 +90,7 @@ function App() {
     let dishes = state.dishes;
     dishes[name] = value;
     dispatch({
+      type: "CHOOSE_A_DISH",
       dishes,
     });
   };
@@ -147,6 +164,7 @@ function App() {
         if (response.status === 200) {
           return response.json().then((dishResponse) => {
             dispatch({
+              type: "GET_RESPONSE",
               dishResponse: dishResponse,
             });
             showTableOrder(dishResponse);
@@ -165,6 +183,7 @@ function App() {
 
   const showTableOrder = () => {
     dispatch({
+      type: "SHOW_ORDERED_DISH",
       visibleOrderTable: true,
     });
   };
@@ -175,12 +194,14 @@ function App() {
       error = res.no_of_slices;
     }
     dispatch({
+      type: "SET_ERROR",
       error,
     });
   };
 
   const cancelErrorForm = () => {
     dispatch({
+      type: "SET_ERROR",
       error: "",
     });
   };
