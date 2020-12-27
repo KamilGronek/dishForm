@@ -4,136 +4,89 @@ import { DishOrderForm } from "./components/DishOrderForm";
 import LoginFormListHeader from "./components/DishOrderTableHeader";
 import { DishOrderTable } from "./components/DishOrderTable";
 import { GetPositionForType } from "./components/SwitchResultForType";
-
-// function useLegacySetState(initialState) {
-//   const stateReducer = (prevState, stateChanges) => {
-//     const newState = {
-//       ...prevState,
-//       ...stateChanges,
-//     };
-//     return newState;
-//   };
-//   return useReducer(stateReducer, initialState);
-// }
-
-const dishReducer = (state, action) => {
-  switch (action.type) {
-    case "CHOOSE_A_DISH": {
-      const { dishes } = action;
-      return { ...state, dishes };
-    }
-    case "SHOW_ORDERED_DISH": {
-      const { visibleOrderTable } = action;
-      return { ...state, visibleOrderTable };
-    }
-    case "SET_ERROR": {
-      const { error } = action;
-      return { ...state, error };
-    }
-    case "GET_RESPONSE": {
-      const { dishResponse } = action;
-      return { ...state, dishResponse };
-    }
-
-    default:
-      return state;
-  }
-};
+import {
+  dishReducer,
+  getAlldishes,
+  getError,
+  isOrderVisible,
+  getDishResponse,
+} from "./reducer";
+import {
+  chooseAdish,
+  getResponse,
+  showOrderDish,
+  setError,
+  returnError,
+} from "./actions";
 
 function App() {
-  const initialState = {
-    dishes: {
-      name: "",
-      preparation_time: "00:00:00",
-      type: "pizza",
-      no_of_slices: "",
-      diameter: 0.01,
-      spiciness_scale: 1,
-      slices_of_bread: 1,
-    },
-    error: "",
-    dishResponse: {},
-    visibleOrderTable: false,
-  };
-
-  const [state, dispatch] = useReducer(dishReducer, initialState);
+  const [state, dispatch] = useReducer(dishReducer, undefined, dishReducer);
 
   const handleChangeGeneralValues = (e) => {
     const value = e.target.value;
     const name = e.target.name;
-    let dishes = state.dishes;
+    let dishes = getAlldishes(state);
     dishes[name] = value;
-    dispatch({
-      type: "CHOOSE_A_DISH",
-      dishes,
-    });
+    dispatch(chooseAdish(dishes));
     if (value === "") {
-      dispatch({
-        error: "",
-      });
+      dispatch(setError());
     }
   };
 
   const handleDiameter = (e) => {
     const value = parseFloat(e.target.value);
-    let dishes = state.dishes;
+    let dishes = getAlldishes(state);
     dishes.diameter = value;
-    dispatch({
-      type: "CHOOSE_A_DISH",
-      dishes,
-    });
+    dispatch(chooseAdish(dishes));
   };
 
   const handleForSpecifiedValues = (e) => {
     const value = parseInt(e.target.value);
     const name = e.target.name;
-    let dishes = state.dishes;
+    let dishes = getAlldishes(state);
     dishes[name] = value;
-    dispatch({
-      type: "CHOOSE_A_DISH",
-      dishes,
-    });
+    dispatch(chooseAdish(dishes));
   };
 
   const getPositionForType = () => {
     return (
       <GetPositionForType
-        type={state.dishes.type}
-        no_of_slices={state.dishes.no_of_slices}
+        type={getAlldishes(state).type}
+        no_of_slices={getAlldishes(state).no_of_slices}
         handleChangeGeneralValues={handleChangeGeneralValues}
-        error={state.error}
-        diameter={state.dishes.diameter}
+        error={getError(state)}
+        diameter={getAlldishes(state).diameter}
         handleDiameter={handleDiameter}
-        spiciness_scale={state.dishes.spiciness_scale}
-        slices_of_bread={state.dishes.slices_of_bread}
+        spiciness_scale={getAlldishes(state).spiciness_scale}
+        slices_of_bread={getAlldishes(state).slices_of_bread}
         handleForSpecifiedValues={handleForSpecifiedValues}
       />
     );
   };
 
   const getStatesForTypes = () => {
-    switch (state.dishes.type) {
+    switch (getAlldishes(state).type) {
       case "pizza":
         return {
-          name: state.dishes.name,
-          preparation_time: state.dishes.preparation_time,
-          type: state.dishes.type,
-          no_of_slices: state.dishes.no_of_slices,
-          diameter: state.dishes.diameter,
+          name: getAlldishes(state).name,
+          preparation_time: getAlldishes(state).preparation_time,
+          type: getAlldishes(state).type,
+          no_of_slices: getAlldishes(state).no_of_slices,
+          diameter: getAlldishes(state).diameter,
         };
       case "soup":
         return {
-          name: state.dishes.name,
-          preparation_time: state.dishes.preparation_time,
-          type: state.dishes.type,
-          spiciness_scale: state.dishes.spiciness_scale,
+          name: getAlldishes(state).name,
+          preparation_time: getAlldishes(state).preparation_time,
+          type: getAlldishes(state).type,
+          spiciness_scale: getAlldishes(state).spiciness_scale,
         };
       case "sandwich":
         return {
-          name: state.dishes.name,
-          preparation_time: state.dishes.preparation_time,
-          type: state.dishes.type,
-          slices_of_bread: state.dishes.slices_of_bread,
+          name: getAlldishes(state).name,
+          preparation_time: getAlldishes(state).preparation_time,
+          type: getAlldishes(state).type,
+          slices_of_bread: getAlldishes(state).slices_of_bread,
         };
       default:
         return "can't found ";
@@ -163,10 +116,7 @@ function App() {
       .then((response) => {
         if (response.status === 200) {
           return response.json().then((dishResponse) => {
-            dispatch({
-              type: "GET_RESPONSE",
-              dishResponse: dishResponse,
-            });
+            dispatch(getResponse(dishResponse));
             showTableOrder(dishResponse);
             cancelErrorForm();
           });
@@ -182,28 +132,19 @@ function App() {
   };
 
   const showTableOrder = () => {
-    dispatch({
-      type: "SHOW_ORDERED_DISH",
-      visibleOrderTable: true,
-    });
+    dispatch(showOrderDish());
   };
 
   const showErrorForm = (res) => {
-    let error = state.error;
+    let error = getError(state);
     if (res.no_of_slices) {
       error = res.no_of_slices;
     }
-    dispatch({
-      type: "SET_ERROR",
-      error,
-    });
+    dispatch(returnError(error));
   };
 
   const cancelErrorForm = () => {
-    dispatch({
-      type: "SET_ERROR",
-      error: "",
-    });
+    dispatch(setError());
   };
 
   return (
@@ -212,16 +153,16 @@ function App() {
         handleChangeGeneralValues={handleChangeGeneralValues}
         getPositionForType={getPositionForType}
         handleSubmit={handleSubmit}
-        preparation_time={state.dishes.preparation_time}
+        preparation_time={getAlldishes(state).preparation_time}
       />
-      {state.visibleOrderTable ? (
+      {isOrderVisible(state) ? (
         <div className="container ">
           <div className="text-center">
             <h1 className="display-4 captionOrder">Dishes order:</h1>
           </div>
           <table className="table table-striped table-hover table-sm table-responsive-sm col-lg-10 offset-lg-1">
             <LoginFormListHeader />
-            <DishOrderTable dishResponse={state.dishResponse} />
+            <DishOrderTable dishResponse={getDishResponse(state)} />
           </table>
         </div>
       ) : (
