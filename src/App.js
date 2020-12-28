@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DishOrderForm } from "./components/DishOrderForm";
 import LoginFormListHeader from "./components/DishOrderTableHeader";
@@ -18,9 +18,27 @@ import {
   setError,
   returnError,
 } from "./actions";
+import { createStore } from "redux";
+
+const store = createStore(dishReducer);
+// window.store = store;
+// store.subscribe(() => console.log(store.getState()));
+
+function useForceUpdate() {
+  const [updateCounter, setUpdateState] = useState(0);
+  function forceUpdate() {
+    setUpdateState((prevCounter) => prevCounter + 1);
+  }
+  return forceUpdate;
+}
 
 function App() {
-  const [state, dispatch] = useReducer(dishReducer, undefined, dishReducer);
+  const forceUpdate = useForceUpdate();
+  const state = store.getState();
+  const dispatch = store.dispatch;
+  useEffect(() => store.subscribe(forceUpdate), []);
+
+  // const [state, dispatch] = useReducer(dishReducer, undefined, dishReducer);
 
   const handleChangeGeneralValues = (e) => {
     const value = e.target.value;
@@ -38,6 +56,7 @@ function App() {
     let dishes = getAlldishes(state);
     dishes.diameter = value;
     dispatch(chooseAdish(dishes));
+    store.dispatch(chooseAdish(dishes));
   };
 
   const handleForSpecifiedValues = (e) => {

@@ -31,7 +31,6 @@ export const dishReducer = (state = initialState, action = {}) => {
       const { dishResponse } = action;
       return { ...state, dishResponse };
     }
-
     default:
       return state;
   }
