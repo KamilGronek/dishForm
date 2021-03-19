@@ -7,11 +7,6 @@ class App extends Component {
   counter = 0;
   constructor(props) {
     super(props);
-    this.handleChangeGeneralValues = this.handleChangeGeneralValues.bind(this);
-    this.handleForSpecifiedValues = this.handleForSpecifiedValues.bind(this);
-    this.handleDiameter = this.handleDiameter.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-
     this.state = {
       dishes: {
         name: "",
@@ -28,7 +23,7 @@ class App extends Component {
     };
   }
 
-  handleChangeGeneralValues(e) {
+  handleChangeGeneralValues=(e)=> {
     const value = e.target.value;
     const name = e.target.name;
     let dishes = this.state.dishes;
@@ -43,7 +38,7 @@ class App extends Component {
     }
   }
 
-  handleDiameter(e) {
+  handleDiameter=(e)=> {
     const value = parseFloat(e.target.value);
     let dishes = this.state.dishes;
     dishes.diameter = value;
@@ -52,7 +47,7 @@ class App extends Component {
     });
   }
 
-  handleForSpecifiedValues(e) {
+  handleForSpecifiedValues=(e)=> {
     const value = parseInt(e.target.value);
     const name = e.target.name;
     let dishes = this.state.dishes;
@@ -145,7 +140,7 @@ class App extends Component {
     }
   };
 
-  getStatesForTypes() {
+  getStatesForTypes=()=> {
     switch (this.state.dishes.type) {
       case "pizza":
         return {
@@ -174,7 +169,7 @@ class App extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit=(e)=> {
     e.preventDefault();
 
     let dish = this.getStatesForTypes();
@@ -214,13 +209,13 @@ class App extends Component {
       .catch((error) => console.log(error));
   }
 
-  showTableOrder() {
+  showTableOrder=()=> {
     this.setState({
       visibleOrderTable: true,
     });
   }
 
-  showErrorForm(res) {
+  showErrorForm=(res)=> {
     let error = this.state.error;
     if (res.no_of_slices) {
       error = res.no_of_slices;
@@ -230,7 +225,7 @@ class App extends Component {
     });
   }
 
-  cancelErrorForm() {
+  cancelErrorForm=()=> {
     this.setState({
       error: "",
     });
