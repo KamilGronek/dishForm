@@ -1,3 +1,4 @@
+// state
 const initialState = {
   dishes: {
     name: "",
@@ -36,6 +37,7 @@ export const dishReducer = (state = initialState, action = {}) => {
   }
 };
 
+// selectors
 export const getAlldishes = (state) => state.dishes;
 export const getError = (state) => state.error;
 export const isOrderVisible = (state) => state.visibleOrderTable;

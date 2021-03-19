@@ -1,11 +1,11 @@
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useStore } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DishOrderForm } from "./components/DishOrderForm";
 import LoginFormListHeader from "./components/DishOrderTableHeader";
 import { DishOrderTable } from "./components/DishOrderTable";
 import { GetPositionForType } from "./components/SwitchResultForType";
 import {
-  dishReducer,
   getAlldishes,
   getError,
   isOrderVisible,
@@ -18,11 +18,6 @@ import {
   setError,
   returnError,
 } from "./actions";
-import { createStore } from "redux";
-
-const store = createStore(dishReducer);
-// window.store = store;
-// store.subscribe(() => console.log(store.getState()));
 
 function useForceUpdate() {
   const [updateCounter, setUpdateState] = useState(0);
@@ -33,6 +28,7 @@ function useForceUpdate() {
 }
 
 function App() {
+  const store = useStore();
   const forceUpdate = useForceUpdate();
   const state = store.getState();
   const dispatch = store.dispatch;
@@ -114,13 +110,9 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     let dish = getStatesForTypes();
-
     let piecesOfPizza = dish.no_of_slices;
-
     const isDigit = (str) => /^\d+$/.test(str);
-
     if (isDigit(piecesOfPizza)) {
       dish.no_of_slices = parseInt(piecesOfPizza);
     }
