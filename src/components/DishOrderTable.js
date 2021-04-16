@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-class DishOrderTable extends Component {
-  render() {
+function DishOrderTable(props){
+
     const {
       id,
       name,
@@ -11,7 +11,7 @@ class DishOrderTable extends Component {
       diameter,
       spiciness_scale,
       slices_of_bread,
-    } = this.props.dishResponse;
+    } = props.dishResponse;
 
     return (
       <>
@@ -29,7 +29,6 @@ class DishOrderTable extends Component {
         </tbody>
       </>
     );
-  }
 }
 
 export default DishOrderTable;

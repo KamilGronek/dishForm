@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import "../styles/DishOrderForm.css";
 
-class DishOrderForm extends Component {
-  render() {
+function DishOrderForm(props) {
+ 
     const {
       handleSubmit,
       handleChangeGeneralValues,
       preparation_time,
       getPositionForType,
-    } = this.props;
+    } = props;
 
     return (
       <>
@@ -74,7 +74,6 @@ class DishOrderForm extends Component {
         </div>
       </>
     );
-  }
 }
 
 export default DishOrderForm;
